@@ -5,8 +5,29 @@ let forml = document.querySelector('.login');
       let nombre = document.querySelector('.registernombre').value;
       let mail = document.querySelector('.registermail').value;
       let contrasena = document.querySelector('.registercontrasena').value;
-      console.log(contrasena);
-      
+      const register = async ()=>{
+        let request = await fetch(`php/login.php`, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: "POST",
+          body: JSON.stringify({
+            nombre, mail, contrasena
+          }),
+          credentials: 'include'  
+        });
+        let response = await request.json();
+        if(request.status != 200){
+            if(request.status = 409){
+                console.log("Mail o contraseña incorrectas")
+                return
+            }
+        }
+        localStorage.setItem("usuariosesion", response);
+        console.log(localStorage.getItem("usuariosesion"));
+        history.back();
+    }
+    register()
 })
     forml.addEventListener('submit', (e) => {
         e.preventDefault();
