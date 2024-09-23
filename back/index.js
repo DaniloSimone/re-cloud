@@ -74,8 +74,11 @@ app.post("/login", async (req, res)=>{
         contrasena: body.contrasena,
     });
     console.log(body)
+    if(busqueda){
     res.send(busqueda);
-    
+    }else{
+      res.send("no se encontro el usuario")
+    }
 })
 app.listen(3000,()=>{
     console.log("Servidor funcionando en puerto 3000");
