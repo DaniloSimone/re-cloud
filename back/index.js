@@ -7,7 +7,8 @@ import multer from 'multer';
 import {dirname, extname, join} from 'path';
 import { fileURLToPath } from 'url';
 import usuario from './schemas/usuarios.js';
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 dotenv.config()
 const direccion = dirname(fileURLToPath(import.meta.url))
 let conex = process.env.MONGOURL
@@ -37,9 +38,10 @@ const multers = multer({
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 app.post("/register", async(req, res)=>{
-    let hash = bcrypt
+    
     let body = req.body
     console.log(body)
+    
     let busqueda = await usuarioModel.findOne({
       mail: body.mail
   });
@@ -47,13 +49,18 @@ app.post("/register", async(req, res)=>{
     res.status(404).send("El usuario ya existe")
     return
   }else{
-    let usuario = new usuarioModel ({
+    bcrypt.hash(body.contrasena, 10, function(err, hash) {
+      let usuario = new usuarioModel ({
         nombre:body.nombre,
         mail:body.mail,
-        contrasena:body.contrasena,
+        contrasena:hash,
     })
     usuario.save()
-    res.send(usuario)
+    let token = jwt.sign(usuario, 'pol243');
+    res.send(token)
+    
+  });
+    
   }
 })
 
@@ -81,10 +88,16 @@ app.post("/login", async (req, res)=>{
     let body = req.body
     let busqueda = await usuarioModel.findOne({
         mail: body.mail,
-        contrasena: body.contrasena,
     });
     if(busqueda){
-    res.send({busqueda});
+      bcrypt.compare(body.contrasena, busqueda.contrasena, function(err, result) {
+        if(result){
+          let token = jwt.sign(body, 'pol243');
+          res.send({token});
+        }else{
+          res.status(401).send("No se encontro el usuario")
+        }
+    });
     return
     }else{
       res.status(404).send("No se encontro el usuario")
