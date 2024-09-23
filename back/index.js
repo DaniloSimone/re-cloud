@@ -35,16 +35,24 @@ const multers = multer({
 
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
-app.post("/register", (req, res )=>{
+app.post("/register", async(req, res)=>{
     let body = req.body
     console.log(body)
+    let busqueda = await usuarioModel.findOne({
+      mail: body.mail
+  });
+  if(busqueda){
+    res.status(404).send("El usuario ya existe")
+    return
+  }else{
     let usuario = new usuarioModel ({
         nombre:body.nombre,
         mail:body.mail,
         contrasena:body.contrasena,
     })
     usuario.save()
-    res.send("hecho")
+    res.send(usuario)
+  }
 })
 
 
@@ -69,15 +77,15 @@ app.post("/buscar", async(req,res)=>{
 })
 app.post("/login", async (req, res)=>{
     let body = req.body
-    let busqueda = await usuarioModel.find({
+    let busqueda = await usuarioModel.findOne({
         mail: body.mail,
         contrasena: body.contrasena,
     });
-    console.log(body)
     if(busqueda){
-    res.send(busqueda);
+    res.send({busqueda});
+    return
     }else{
-      res.send("no se encontro el usuario")
+      res.status(404).send("No se encontro el usuario")
     }
 })
 app.listen(3000,()=>{
