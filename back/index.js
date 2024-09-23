@@ -7,6 +7,7 @@ import multer from 'multer';
 import {dirname, extname, join} from 'path';
 import { fileURLToPath } from 'url';
 import usuario from './schemas/usuarios.js';
+import bcrypt from 'bcryptjs'
 dotenv.config()
 const direccion = dirname(fileURLToPath(import.meta.url))
 let conex = process.env.MONGOURL
@@ -36,6 +37,7 @@ const multers = multer({
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 app.post("/register", async(req, res)=>{
+    let hash = bcrypt
     let body = req.body
     console.log(body)
     let busqueda = await usuarioModel.findOne({
