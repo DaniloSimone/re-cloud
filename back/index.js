@@ -56,8 +56,9 @@ app.post("/register", async(req, res)=>{
         contrasena:hash,
     })
     usuario.save()
-    let token = jwt.sign(usuario, 'pol243');
-    res.send(token)
+    let superusuario = usuario.toObject();
+    let token = jwt.sign(superusuario, 'pol243');
+    res.send(token);
     
   });
     
@@ -90,10 +91,11 @@ app.post("/login", async (req, res)=>{
         mail: body.mail,
     });
     if(busqueda){
-      bcrypt.compare(body.contrasena, busqueda.contrasena, function(err, result) {
+      bcrypt.compare(body.contrasena, busqueda.contrasena,  function (err, result) {
         if(result){
-          let token = jwt.sign(body, 'pol243');
-          res.send({token});
+          let superbusqueda = busqueda.toObject();
+          let token = jwt.sign(superbusqueda, 'pol243');
+          res.send(token);
         }else{
           res.status(401).send("No se encontro el usuario")
         }
