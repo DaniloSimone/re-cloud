@@ -74,6 +74,7 @@ app.post("/upload",multers.single("file"), (req,res)=>{
     nombre: archivo.originalname,
     ruta: archivo.path,
     tamano: archivo.size,
+    extension: extension,
     pkusuario: "1",
   })
   guardar.save()
