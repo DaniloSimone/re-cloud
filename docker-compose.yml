@@ -26,7 +26,7 @@ services:
       - mongo-data:/data/db
     restart: always
     # use 1.5GB for cache instead of the default (Total RAM - 1GB)/2:
-    command: mongod --wiredTigerCacheSizeGB 1.5
+    command: mongod --wiredTigerCacheSizeGB 0.5
     networks:
       - recloud_network
 
