@@ -16,7 +16,6 @@ services:
     image: mongo:latest
     mem_limit: 1G  # Aumenta el límite de memoria
     container_name: recloud_mongodb
-    privileged: true
     ports:
       - "27018:27017"
     environment:
