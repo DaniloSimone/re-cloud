@@ -1,0 +1,27 @@
+services:
+  back:
+    build:
+      dockerfile: .dockerfile
+    container_name: recloud_back
+    ports:
+      - 3001:3000
+    networks:
+      - recloud_network
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongo-data:/data/db
+      
+volumes:
+  mongo-data:
+    driver: local
+
+networks:
+  recloud_network:
+    driver: bridge
