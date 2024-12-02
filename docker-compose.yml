@@ -13,7 +13,8 @@ services:
       - recloud_network
 
   mongodb:
-    image: mongo:latest
+    image: mongo:alpine
+    mem_limit: 1G  # Aumenta el límite de memoria
     container_name: recloud_mongodb
     ports:
       - "27018:27017"
@@ -24,11 +25,7 @@ services:
       - mongo-data:/data/db
     networks:
       - recloud_network
-    deploy:
-      resources:
-        limits:
-          memory: 1g
-      
+
 volumes:
   mongo-data:
     driver: local
