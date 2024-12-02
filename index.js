@@ -12,7 +12,7 @@ import jwt from 'jsonwebtoken';
 dotenv.config()
 const direccion = dirname(fileURLToPath(import.meta.url))
 let conex = process.env.MONGOURL
-mongoose.connect(conex+"prueba").then(connect=>{
+mongoose.connect(conex).then(_connect=>{
     console.log("Conectado a la bd")
 }).catch(err=>{
     console.log(err)
