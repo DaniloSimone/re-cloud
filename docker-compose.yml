@@ -24,6 +24,9 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=password
     volumes:
       - mongo-data:/data/db
+    restart: always
+    # use 1.5GB for cache instead of the default (Total RAM - 1GB)/2:
+    command: mongod --wiredTigerCacheSizeGB 1.5
     networks:
       - recloud_network
 
