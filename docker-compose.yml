@@ -13,7 +13,7 @@ services:
       - recloud_network
 
   mongodb:
-    image: mongo:alpine
+    image: mongo:latest
     mem_limit: 1G  # Aumenta el límite de memoria
     container_name: recloud_mongodb
     ports:
