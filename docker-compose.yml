@@ -5,6 +5,8 @@ services:
     container_name: recloud_back
     environment:
       - MONGOURL=mongodb://admin:password@recloud_mongodb:27017
+    volumes:
+      - /home/node/app/archivos:/archivos
     ports:
       - 3001:3000
     networks:
